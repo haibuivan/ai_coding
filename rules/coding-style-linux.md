@@ -1,4 +1,10 @@
-# Coding Style
+# Coding Style — Linux Kernel Style
+
+Reference: [Linux kernel coding style](https://docs.kernel.org/process/coding-style.html)
+(`Documentation/process/coding-style.rst` in the kernel source tree)
+
+This file summarizes the conventions for project use. When in doubt,
+the reference document above is authoritative.
 
 ## General
 
@@ -104,6 +110,25 @@ const uint8_t *data;
 struct request *request;
 ```
 
+## Comments
+
+* Comments should explain **why**, not **what**; the code already says what.
+* Avoid commenting inside a function body; if a function needs that,
+  it is probably too complex and should be split.
+* Use kernel-doc format for public API function comments.
+* Preferred multi-line comment style:
+
+```c
+/*
+ * This is the preferred style for multi-line
+ * comments in the kernel-style source code.
+ * Please use it consistently.
+ *
+ * Description: a column of asterisks on the left side,
+ * with beginning and ending almost-blank lines.
+ */
+```
+
 ## Functions
 
 * One function should perform one clear task.
@@ -118,7 +143,7 @@ struct request *request;
 * Report failures explicitly through return values or output parameters.
 * Do not ignore return values.
 * Use early returns when no cleanup is needed.
-* Use `goto` for shared cleanup paths.
+* Use `goto` for shared cleanup paths (centralized exiting).
 * Cleanup labels must describe the action.
 * Release resources in reverse acquisition order.
 
@@ -192,3 +217,11 @@ if (!object)
 * Do not manually edit generated files.
 * Do not reformat third-party code only to match this guide.
 * Keep compatibility changes isolated.
+
+## Tooling
+
+* `clang-format` can be used to auto-format and spot style issues; see
+  `Documentation/dev-tools/clang-format.rst` in the kernel tree for the
+  kernel's own configuration approach.
+* An `.editorconfig`-compatible editor will pick up basic indentation
+  settings automatically — see [editorconfig.org](https://editorconfig.org/).
